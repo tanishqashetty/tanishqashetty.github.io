@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Spark — Product Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#F5A623;--gold-dim:rgba(245,166,35,0.12);--gold-border:rgba(245,166,35,0.3);--bg:#0e0d0b;--bg2:#161410;--bg3:#1c1a15;--ink:#e8e6e0;--ink2:#a09c94;--ink3:#5a5650;--border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1)}
+html,body{width:100%;height:100%;background:var(--bg);font-family:'Instrument Sans',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+.stage{width:100%;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem 1rem;gap:1.75rem;position:relative}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.title-card{text-align:center;opacity:0;animation:fadeIn 0.7s ease 0.2s forwards}
+.eyebrow{display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:8px}
+.e-dot{width:5px;height:5px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.e-text{font-size:10px;font-family:'DM Mono',monospace;color:var(--ink3);letter-spacing:0.1em;text-transform:uppercase}
+.e-sep{color:var(--ink3);font-size:10px}
+.e-tag{font-size:10px;font-family:'DM Mono',monospace;color:var(--gold);letter-spacing:0.06em}
+.title-main{font-family:'DM Serif Display',serif;font-size:clamp(26px,4.5vw,48px);color:white;letter-spacing:-1px;line-height:1.1;margin-bottom:5px}
+.title-main em{font-style:italic;color:var(--gold)}
+.title-sub{font-size:13px;color:var(--ink3);font-style:italic;font-family:'DM Serif Display',serif}
+.pbadges{display:flex;gap:5px;justify-content:center;margin-top:8px}
+.pb{font-size:9px;font-family:'DM Mono',monospace;padding:2px 9px;border-radius:99px;border:1px solid var(--border2);color:var(--ink3)}
+.pb.yt{border-color:rgba(255,68,68,0.3);color:#ff7070}
+.pb.tt{border-color:rgba(255,255,255,0.15);color:#bbb}
+.pb.ig{border-color:rgba(225,48,108,0.3);color:#f06292}
+.progress-wrap{width:min(500px,86vw);height:1.5px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;opacity:0;animation:fadeIn 0.4s ease 0.7s forwards}
+.progress-bar{height:100%;background:var(--gold);width:0%;border-radius:2px}
+.scene-label{font-size:10px;color:var(--ink3);font-family:'DM Mono',monospace;letter-spacing:0.06em;text-align:center;opacity:0;animation:fadeIn 0.4s ease 0.8s forwards;height:14px}
+.demo-row{display:flex;align-items:center;justify-content:center;gap:2.5rem;opacity:0;animation:slideUp 0.7s cubic-bezier(0.23,1,0.32,1) 0.4s forwards}
+@keyframes slideUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.phone{width:280px;height:560px;background:var(--bg2);border-radius:38px;border:7px solid #1a1815;position:relative;overflow:hidden;box-shadow:0 0 0 1px #252220,0 40px 80px rgba(0,0,0,0.7)}
+.notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:68px;height:18px;background:#0e0d0b;border-radius:9px;z-index:100}
+.pscreen{width:100%;height:100%;overflow:hidden;position:relative}
+.scene{position:absolute;inset:0;opacity:0;transition:opacity 0.5s ease;pointer-events:none;padding-top:36px}
+.scene.active{opacity:1;pointer-events:auto}
+.s1{width:100%;height:100%;background:var(--bg2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.25rem;text-align:center;gap:10px}
+.s1-icon{font-size:38px}
+.s1-hl{font-family:'DM Serif Display',serif;font-size:16px;color:var(--ink);line-height:1.4;font-style:italic}
+.s1-body{font-size:10px;color:var(--ink3);line-height:1.6;max-width:210px}
+.s1-stat{display:inline-flex;align-items:center;gap:6px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:8px;padding:7px 12px;margin-top:2px}
+.s1-num{font-family:'DM Serif Display',serif;font-size:20px;color:var(--gold)}
+.s1-lbl{font-size:8px;color:var(--ink2);line-height:1.4;text-align:left}
+.tools{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.tc{font-size:7px;font-family:'DM Mono',monospace;padding:2px 6px;border-radius:99px;border:1px solid var(--border2);color:var(--ink3)}
+.tc.s{text-decoration:line-through;opacity:0.35}
+.bar{background:var(--bg3);border-bottom:1px solid var(--border);padding:7px 10px;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.logo-sm{width:17px;height:17px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-sm svg{width:8px;height:8px;fill:#0e0d0b}
+.bar-name{font-family:'DM Serif Display',serif;font-size:12px;color:var(--ink)}
+.bar-tag{font-size:7px;color:var(--ink3);font-family:'DM Mono',monospace;margin-left:auto;border:1px solid var(--border2);padding:1px 5px;border-radius:99px}
+.s2w{width:100%;height:100%;background:var(--bg2);display:flex;flex-direction:column}
+.s2b{flex:1;padding:9px 10px 0;display:flex;flex-direction:column;gap:7px;overflow:hidden}
+.fl{font-size:7px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px}
+.plats{display:flex;gap:4px}
+.pb2{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 3px;border-radius:5px;border:1px solid var(--border2);background:transparent}
+.pb2.ayt{border-color:rgba(255,68,68,0.35);background:rgba(255,68,68,0.06)}
+.pb2.att{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.04);opacity:0.4}
+.pb2.aig{border-color:rgba(225,48,108,0.35);background:rgba(225,48,108,0.06);opacity:0.4}
+.pi{font-size:11px;line-height:1}
+.pn{font-size:7px;color:var(--ink2);font-family:'DM Mono',monospace}
+.pb2.ayt .pn{color:#ff7070}
+.inp{width:100%;height:24px;border:1px solid var(--border2);border-radius:5px;padding:0 7px;font-size:9px;color:var(--ink);background:var(--bg3);display:flex;align-items:center;font-family:'DM Mono',monospace}
+.inp.typing::after{content:'|';animation:blink 0.8s infinite;color:var(--gold)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.chips{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
+.chip{font-size:7px;padding:2px 6px;border-radius:99px;border:1px solid var(--border2);color:var(--ink3)}
+.chip.on{border-color:var(--gold-border);color:var(--gold);background:var(--gold-dim)}
+.stages{display:flex;gap:3px;margin-top:3px}
+.sg{flex:1;padding:4px 2px;border:1px solid var(--border2);border-radius:5px;background:transparent;display:flex;flex-direction:column;align-items:center;gap:1px}
+.sg.on{border-color:var(--gold-border);background:var(--gold-dim)}
+.sgl{font-size:7px;color:var(--ink2);font-weight:500}
+.sgs{font-size:6px;color:var(--ink3);font-family:'DM Mono',monospace}
+.sg.on .sgl{color:var(--gold)}
+.s3w{width:100%;height:100%;background:var(--bg2);display:flex;flex-direction:column}
+.s3btn{margin:9px 9px 7px;background:var(--gold);border-radius:6px;height:30px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#0e0d0b;font-family:'Instrument Sans',sans-serif;position:relative;overflow:hidden}
+.shim{position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);animation:bshim 1.1s infinite}
+@keyframes bshim{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.skels{padding:0 9px;display:flex;flex-direction:column;gap:5px}
+.skel{border-radius:7px;background:linear-gradient(90deg,var(--bg3) 25%,#201e19 50%,var(--bg3) 75%);background-size:200% 100%;animation:sksh 1.4s infinite}
+@keyframes sksh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.s3d{text-align:center;padding:7px;font-size:8px;color:var(--ink3);font-family:'DM Mono',monospace}
+.s4w{width:100%;height:100%;background:var(--bg2);display:flex;flex-direction:column;overflow-y:auto}
+.s4bar{background:var(--bg3);border-bottom:1px solid var(--border);padding:7px 10px;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.s4logo{width:15px;height:15px;background:var(--gold);border-radius:3px;display:flex;align-items:center;justify-content:center}
+.s4logo svg{width:7px;height:7px;fill:#0e0d0b}
+.s4name{font-family:'DM Serif Display',serif;font-size:11px;color:var(--ink)}
+.s4plat{font-size:7px;font-family:'DM Mono',monospace;margin-left:auto;border:1px solid rgba(255,68,68,0.25);color:#ff8080;padding:1px 5px;border-radius:99px}
+.s4sec{font-size:7px;font-family:'DM Mono',monospace;color:var(--ink3);text-transform:uppercase;letter-spacing:0.06em;padding:7px 9px 3px;flex-shrink:0}
+.cc{background:var(--bg3);border:1px solid var(--border);border-radius:7px;margin:0 7px 5px;padding:8px 9px;opacity:0;transform:translateY(5px);transition:all 0.4s ease;flex-shrink:0}
+.cc.show{opacity:1;transform:translateY(0)}
+.cc.hi{border-color:var(--gold-border);background:rgba(245,166,35,0.04)}
+.ccn{font-size:6px;font-family:'DM Mono',monospace;color:var(--ink3);margin-bottom:3px}
+.cch{font-family:'DM Serif Display',serif;font-style:italic;font-size:10px;color:var(--ink);line-height:1.4;margin-bottom:5px}
+.ccrs{display:flex;flex-direction:column;gap:3px;margin-bottom:5px}
+.ccr{display:flex;gap:3px;align-items:flex-start}
+.ccp{font-size:6px;font-weight:600;font-family:'DM Mono',monospace;padding:1px 4px;border-radius:3px;white-space:nowrap;flex-shrink:0;margin-top:1px;text-transform:uppercase}
+.pa{background:rgba(100,140,255,0.12);color:#7ea8ff}
+.pc{background:rgba(80,200,120,0.12);color:#6ecf8e}
+.pw{background:rgba(245,166,35,0.12);color:#f5a623}
+.cct{font-size:8px;color:var(--ink2);line-height:1.45}
+.ccas{display:flex;gap:3px;border-top:1px solid var(--border);padding-top:4px}
+.ccb{font-size:6px;padding:2px 6px;border:1px solid var(--border2);border-radius:3px;color:var(--ink3);background:transparent;font-family:'Instrument Sans',sans-serif}
+.ccb.sv{color:var(--gold);border-color:var(--gold-border)}
+.cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(14,13,11,0.92),transparent);padding:18px 12px 10px;opacity:0;transition:opacity 0.4s;pointer-events:none;z-index:50}
+.cap.show{opacity:1}
+.cap-txt{font-size:9px;color:white;line-height:1.5;text-align:center;font-weight:500}
+.side{width:230px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;gap:1.1rem;opacity:0;animation:fadeIn 0.5s ease 1s forwards}
+.side-sc{font-size:9px;font-family:'DM Mono',monospace;color:var(--ink3);letter-spacing:0.08em;text-transform:uppercase}
+.side-hl{font-family:'DM Serif Display',serif;font-size:20px;color:white;line-height:1.25;font-style:italic}
+.side-bd{font-size:11px;color:var(--ink2);line-height:1.6}
+.side-tg{display:inline-flex;align-items:center;gap:5px;font-size:8px;color:var(--ink3);font-family:'DM Mono',monospace}
+.sdot{width:5px;height:5px;background:var(--gold);border-radius:50%}
+.controls{display:flex;align-items:center;gap:10px;opacity:0;animation:fadeIn 0.4s ease 1.1s forwards}
+.ctrl{width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--ink2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all 0.15s}
+.ctrl:hover{background:rgba(255,255,255,0.08);color:white}
+.ctrl.play{width:38px;height:38px;background:var(--gold);border-color:var(--gold);color:#0e0d0b;font-size:13px}
+.ctrl.play:hover{opacity:0.88}
+.dots{display:flex;gap:5px}
+.dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.15);cursor:pointer;transition:all 0.2s}
+.dot.on{background:var(--gold);transform:scale(1.3)}
+.clbl{font-size:9px;color:var(--ink3);font-family:'DM Mono',monospace}
+@media(max-width:660px){.demo-row{flex-direction:column;gap:1rem}.side{width:min(290px,86vw);text-align:center}.side-tg{justify-content:center}}
+</style>
+</head>
+<body>
+<div class="stage">
+<div class="grid"></div>
+<div class="title-card">
+  <div class="eyebrow"><div class="e-dot"></div><span class="e-text">Portfolio Demo</span><span class="e-sep">/</span><span class="e-tag">GenAI Product · 2025</span></div>
+  <h1 class="title-main">Meet <em>Spark</em></h1>
+  <p class="title-sub">The inspiration layer creators are missing.</p>
+  <div class="pbadges"><span class="pb yt">YouTube Shorts</span><span class="pb tt">TikTok</span><span class="pb ig">Instagram Reels</span></div>
+</div>
+<div class="demo-row">
+  <div style="position:relative">
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="pscreen">
+        <!-- S1 -->
+        <div class="scene active" id="sc1">
+          <div class="s1">
+            <div class="s1-icon">📱</div>
+            <p class="s1-hl">"I know what I create.<br/>I just don't know what<br/>to make <em>next</em>."</p>
+            <p class="s1-body">Most AI tools activate after you know what you're making. Nobody has solved the blank page moment.</p>
+            <div class="s1-stat"><span class="s1-num">74%</span><span class="s1-lbl">of creators cite<br/>ideation as blocker #1</span></div>
+            <div class="tools"><span class="tc s">Edit with AI</span><span class="tc s">CapCut AI</span><span class="tc s">Speech to Song</span><span class="tc" style="border-color:var(--gold-border);color:var(--gold)">Spark ✓</span></div>
+          </div>
+          <div class="cap" id="cap1"><p class="cap-txt">The blank page moment — before the camera opens — goes unsolved.</p></div>
+        </div>
+        <!-- S2 -->
+        <div class="scene" id="sc2">
+          <div class="s2w">
+            <div class="bar"><div class="logo-sm"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></svg></div><span class="bar-name">Spark</span><span class="bar-tag">concept gen</span></div>
+            <div class="s2b">
+              <div><div class="fl">Platform</div>
+                <div class="plats">
+                  <div class="pb2 ayt"><span class="pi">▶</span><span class="pn">YT Shorts</span></div>
+                  <div class="pb2 att"><span class="pi">♪</span><span class="pn">TikTok</span></div>
+                  <div class="pb2 aig"><span class="pi">◈</span><span class="pn">Reels</span></div>
+                </div>
+              </div>
+              <div><div class="fl">Your niche</div><div class="inp typing" id="nicheEl"></div></div>
+              <div><div class="fl">Tone</div>
+                <div class="chips"><div class="chip">Educational</div><div class="chip on">Funny</div><div class="chip">Inspiring</div><div class="chip on">Storytime</div><div class="chip">Tutorial</div></div>
+              </div>
+              <div><div class="fl">Creator stage</div>
+                <div class="stages"><div class="sg"><span class="sgl">Starting</span><span class="sgs">&lt;1K</span></div><div class="sg on"><span class="sgl">Growing</span><span class="sgs">1K–50K</span></div><div class="sg"><span class="sgl">Established</span><span class="sgs">50K+</span></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="cap" id="cap2"><p class="cap-txt">Pick your platform. Describe your niche, tone &amp; creator stage.</p></div>
+        </div>
+        <!-- S3 -->
+        <div class="scene" id="sc3">
+          <div class="s3w">
+            <div class="bar"><div class="logo-sm"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></svg></div><span class="bar-name">Spark</span><span class="bar-tag">YouTube Shorts</span></div>
+            <div class="s3btn"><span>Sparking ideas<span style="font-family:'DM Mono',monospace" id="gd"></span></span><div class="shim"></div></div>
+            <div class="skels"><div class="skel" style="height:120px"></div><div class="skel" style="height:120px;animation-delay:0.18s"></div><div class="skel" style="height:120px;animation-delay:0.36s"></div></div>
+            <div class="s3d"><span>Generating concepts</span></div>
+          </div>
+          <div class="cap" id="cap3"><p class="cap-txt">Claude generates 3 platform-native concepts — hook, arc, CTA &amp; cover frame.</p></div>
+        </div>
+        <!-- S4 -->
+        <div class="scene" id="sc4">
+          <div class="s4w">
+            <div class="s4bar"><div class="s4logo"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></svg></div><span class="s4name">Spark</span><span class="s4plat">YouTube Shorts</span></div>
+            <div class="s4sec">Your concepts</div>
+            <div class="cc" id="cc1"><div class="ccn">Concept 01 of 03</div><div class="cch">"I spent 3 days on $5/day in Bangkok — here's what happened"</div><div class="ccrs"><div class="ccr"><span class="ccp pa">Arc</span><span class="cct">Day-by-day breakdown with reaction shots at each meal</span></div><div class="ccr"><span class="ccp pc">CTA</span><span class="cct">Comment your cheapest meal ever 👇</span></div><div class="ccr"><span class="ccp pw">Why</span><span class="cct">Budget + challenge drives massive saves from aspirational travelers</span></div></div><div class="ccas"><button class="ccb sv">✓ Saved</button><button class="ccb">Deep dive</button></div></div>
+            <div class="cc hi" id="cc2"><div class="ccn">Concept 02 of 03</div><div class="cch">"Things nobody tells you before moving to Southeast Asia"</div><div class="ccrs"><div class="ccr"><span class="ccp pa">Arc</span><span class="cct">3 counterintuitive truths with quick location cuts</span></div><div class="ccr"><span class="ccp pc">CTA</span><span class="cct">Drop a question — I'll answer in part 2</span></div><div class="ccr"><span class="ccp pw">Why</span><span class="cct">Series hook drives return viewers; curiosity gap works every time</span></div></div><div class="ccas"><button class="ccb">Save concept</button><button class="ccb">Deep dive</button></div></div>
+            <div class="cc" id="cc3"><div class="ccn">Concept 03 of 03</div><div class="cch">"POV: Landed in Bali with $200 and no plan"</div><div class="ccrs"><div class="ccr"><span class="ccp pa">Arc</span><span class="ccp" style="display:none"></span><span class="cct">First-person chaos → resourceful solutions, budget overlay</span></div><div class="ccr"><span class="ccp pc">CTA</span><span class="cct">Follow for the full week series 🌴</span></div><div class="ccr"><span class="ccp pw">Why</span><span class="cct">POV + cliffhanger = highest retention Short structure</span></div></div><div class="ccas"><button class="ccb">Save concept</button><button class="ccb">Deep dive</button></div></div>
+          </div>
+          <div class="cap" id="cap4"><p class="cap-txt">3 concepts, not 5 — curated, not generated. Each with a psychological "why it works".</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="side">
+    <p class="side-sc" id="ssc">Scene 1 of 4</p>
+    <h2 class="side-hl" id="shl">The blank page problem.</h2>
+    <p class="side-bd" id="sbd">Most GenAI tools for creators activate after you know what to make. Spark is the pre-creation inspiration layer — deciding what to make before the camera opens.</p>
+    <span class="side-tg"><span class="sdot"></span><span id="stg">Platform-agnostic · Creator-stage-aware</span></span>
+  </div>
+</div>
+<div class="progress-wrap"><div class="progress-bar" id="pgBar"></div></div>
+<p class="scene-label" id="scLabel">Scene 1 / 4 — The Problem</p>
+<div class="controls">
+  <button class="ctrl" onclick="prev()">←</button>
+  <div class="dots" id="dotsEl"></div>
+  <button class="ctrl play" id="playBtn" onclick="togglePlay()">⏸</button>
+  <button class="ctrl" onclick="next()">→</button>
+  <span class="clbl" id="clbl">auto-playing</span>
+</div>
+</div>
+<script>
+const S=[
+  {id:'sc1',cap:'cap1',sc:'Scene 1 of 4',hl:'The blank page problem.',bd:'Most GenAI tools for creators activate after you know what to make. Spark is the pre-creation inspiration layer — deciding what to make before the camera opens.',tg:'74% cite ideation as blocker #1',lb:'Scene 1 / 4 — The Problem',dur:5000},
+  {id:'sc2',cap:'cap2',sc:'Scene 2 of 4',hl:'Tell Spark about you.',bd:'Pick your platform — YouTube Shorts, TikTok, or Reels. Enter your niche, tone, and creator stage. Three inputs, thoughtfully chosen.',tg:'Creator-stage-aware · Platform-native',lb:'Scene 2 / 4 — The Input',dur:5500,fn:typeNiche},
+  {id:'sc3',cap:'cap3',sc:'Scene 3 of 4',hl:'AI at work.',bd:'Claude generates 3 platform-native concepts — not prompts, not ideas, but production-ready briefs with hook, arc, CTA, cover frame, and psychological reasoning.',tg:'Powered by Claude API',lb:'Scene 3 / 4 — Generating',dur:4000},
+  {id:'sc4',cap:'cap4',sc:'Scene 4 of 4',hl:'3 concepts. Not 5.',bd:'Five options create paradox of choice. Three feels curated. Save what works, deep-dive for a full script outline. Ready to film.',tg:'Product decision: 3 > 5',lb:'Scene 4 / 4 — Your Concepts',dur:8000,fn:revealCards},
+];
+let cur=0,playing=true,pgt=null,pgs=null,pgd=0;
+const de=document.getElementById('dotsEl');
+S.forEach((_,i)=>{const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>goTo(i);de.appendChild(d);});
+function goTo(i){
+  clearPg();
+  const p=S[cur];document.getElementById(p.id).classList.remove('active');document.getElementById(p.cap).classList.remove('show');
+  cur=i;const s=S[cur];
+  document.getElementById(s.id).classList.add('active');
+  setTimeout(()=>document.getElementById(s.cap).classList.add('show'),600);
+  updateSide(s);updateDots();document.getElementById('scLabel').textContent=s.lb;
+  if(s.fn)s.fn();if(playing)startPg(s.dur);
+}
+function updateSide(s){
+  document.getElementById('ssc').textContent=s.sc;
+  const h=document.getElementById('shl');h.style.opacity=0;
+  setTimeout(()=>{h.textContent=s.hl;h.style.transition='opacity 0.35s';h.style.opacity=1;},180);
+  document.getElementById('sbd').textContent=s.bd;document.getElementById('stg').textContent=s.tg;
+}
+function updateDots(){de.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===cur));}
+function startPg(dur){
+  clearPg();pgd=dur;pgs=performance.now();
+  const b=document.getElementById('pgBar');b.style.width='0%';
+  function tick(){const p=Math.min((performance.now()-pgs)/pgd*100,100);b.style.width=p+'%';if(p<100){pgt=requestAnimationFrame(tick);}else goTo((cur+1)%S.length);}
+  pgt=requestAnimationFrame(tick);
+}
+function clearPg(){if(pgt)cancelAnimationFrame(pgt);document.getElementById('pgBar').style.width='0%';}
+function togglePlay(){playing=!playing;document.getElementById('playBtn').textContent=playing?'⏸':'▶';document.getElementById('clbl').textContent=playing?'auto-playing':'paused';if(playing)startPg(S[cur].dur);else clearPg();}
+function next(){goTo((cur+1)%S.length);}
+function prev(){goTo((cur+S.length-1)%S.length);}
+const NT='budget travel in Southeast Asia';
+function typeNiche(){const el=document.getElementById('nicheEl');el.textContent='';el.classList.add('typing');let i=0;function step(){if(i<=NT.length){el.textContent=NT.slice(0,i);i++;setTimeout(step,52);}else el.classList.remove('typing');}setTimeout(step,350);}
+function revealCards(){['cc1','cc2','cc3'].forEach((id,i)=>{const el=document.getElementById(id);el.classList.remove('show');setTimeout(()=>el.classList.add('show'),400+i*320);});}
+setTimeout(()=>{document.getElementById('cap1').classList.add('show');startPg(S[0].dur);},900);
+</script>
+</body>
+</html>
