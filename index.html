@@ -1,14 +1,514 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Spark — Content Concept Generator</title>
-    <meta name="description" content="AI-powered content concept generator for YouTube Shorts, TikTok, and Instagram Reels. Decide what to make before you open the camera." />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tanishqa Shetty · AI PM Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#faf9f7;--bg2:#f3f1ed;--bg3:#eceae4;--txt:#1a1917;--txt2:#6b6860;--txt3:#a09d98;--accent:#8b6f47;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);--green:#16a34a;
+  --px:3rem;
+}
+html{scroll-behavior:smooth;}
+body{background:#f0ede8;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:2rem 1.5rem;font-family:'Inter',sans-serif;}
+.pf{font-family:'Inter',sans-serif;font-weight:400;color:var(--txt);background:var(--bg);max-width:960px;width:100%;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 4px 40px rgba(0,0,0,0.08);}
+
+nav{display:flex;justify-content:space-between;align-items:center;padding:1.25rem var(--px);border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:100;}
+.logo{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--txt);letter-spacing:-0.01em;text-decoration:none;}
+.nav-links{display:flex;gap:1.75rem;list-style:none;}
+.nav-links a{font-size:12px;font-weight:400;color:var(--txt2);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s;}
+.nav-links a:hover{color:var(--txt);}
+.nav-btn{font-size:11px;font-weight:500;padding:7px 16px;border:1px solid var(--border2);border-radius:3px;color:var(--txt);text-decoration:none;letter-spacing:0.04em;transition:all 0.2s;}
+.nav-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+.avail{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--txt2);padding:0.65rem var(--px);border-bottom:1px solid var(--border);background:var(--bg2);}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 2.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+.hero{padding:4rem var(--px) 3rem;border-bottom:1px solid var(--border);}
+.hero-kicker{font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--txt3);margin-bottom:1.25rem;}
+.hero h1{font-family:'Playfair Display',serif;font-size:58px;font-weight:800;line-height:1.03;letter-spacing:-0.03em;color:var(--txt);margin-bottom:1.25rem;}
+.hero h1 em{font-style:italic;color:var(--accent);}
+.hero-sub{font-size:15px;font-weight:300;line-height:1.8;color:var(--txt2);max-width:560px;margin-bottom:2.25rem;}
+.stats-bar{display:flex;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:0 0 2.25rem;}
+.stat{flex:1;padding:1.5rem 0;border-right:1px solid var(--border);text-align:center;}
+.stat:last-child{border-right:none;}
+.stat-n{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--txt);letter-spacing:-0.02em;line-height:1;}
+.stat-l{font-size:10px;font-weight:400;color:var(--txt3);margin-top:6px;letter-spacing:0.04em;line-height:1.4;}
+.hero-cta{display:flex;gap:14px;align-items:center;}
+.btn-solid{font-size:12px;font-weight:500;letter-spacing:0.04em;padding:11px 24px;background:var(--txt);color:var(--bg);border:none;border-radius:3px;cursor:pointer;text-decoration:none;transition:opacity 0.2s;}
+.btn-solid:hover{opacity:0.85;}
+.btn-ghost{font-size:12px;font-weight:400;color:var(--txt2);text-decoration:none;padding-bottom:2px;border-bottom:1px solid var(--border2);transition:color 0.2s;}
+.btn-ghost:hover{color:var(--txt);}
+
+.section{padding:2.75rem var(--px);border-bottom:1px solid var(--border);}
+.sec-label{font-size:10px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--txt3);margin-bottom:2rem;display:flex;align-items:center;gap:10px;}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.coverage-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:8px;overflow:hidden;}
+.cov-item{background:var(--bg);padding:1.5rem;position:relative;transition:background 0.2s;}
+.cov-item:hover{background:var(--bg2);}
+.cov-title{font-size:14px;font-weight:500;color:var(--txt);margin-bottom:7px;line-height:1.3;padding-right:3.5rem;}
+.cov-sub{font-size:12px;font-weight:300;color:var(--txt2);line-height:1.6;margin-bottom:10px;}
+.cov-tags{font-size:10px;font-weight:400;color:var(--txt3);}
+.depth{position:absolute;top:1.25rem;right:1.25rem;font-size:9px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;padding:2px 7px;border-radius:2px;background:rgba(139,111,71,0.1);color:var(--accent);}
+
+.cases{display:flex;flex-direction:column;}
+.case{padding:2rem 0;border-top:1px solid var(--border);}
+.case:first-child{border-top:none;padding-top:0;}
+.case-tags-row{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+.ctag{font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--border2);border-radius:2px;color:var(--txt2);}
+.ctag-solo{background:rgba(139,111,71,0.08);border-color:rgba(139,111,71,0.25);color:var(--accent);}
+.case-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;letter-spacing:-0.02em;line-height:1.2;color:var(--txt);margin-bottom:9px;}
+.case-desc{font-size:13px;font-weight:300;line-height:1.75;color:var(--txt2);margin-bottom:1.25rem;}
+.impact-row{display:flex;gap:16px;margin-bottom:1.5rem;flex-wrap:wrap;}
+.imp{text-align:center;min-width:75px;}
+.imp-n{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--txt);letter-spacing:-0.02em;}
+.imp-l{font-size:10px;color:var(--txt3);margin-top:3px;line-height:1.3;}
+.decisions{background:var(--bg2);border-radius:8px;padding:1.1rem 1.4rem;}
+.dec-label{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:10px;}
+.dec-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.dec-list li{font-size:13px;font-weight:300;line-height:1.65;color:var(--txt2);display:flex;gap:9px;}
+.dec-list li::before{content:'→';color:var(--accent);flex-shrink:0;font-size:11px;margin-top:3px;}
+.case-links{display:flex;gap:1.25rem;margin-top:1.1rem;flex-wrap:wrap;align-items:center;}
+.read-more-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--accent);background:none;border:none;cursor:pointer;padding:0 0 1px;letter-spacing:0.02em;border-bottom:1px solid rgba(139,111,71,0.35);transition:color 0.2s;font-family:'Inter',sans-serif;text-decoration:none;}
+.read-more-btn:hover{color:var(--txt);}
+.arch-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:400;color:var(--txt3);text-decoration:none;padding-bottom:1px;border-bottom:1px solid var(--border2);transition:color 0.2s;}
+.arch-link:hover{color:var(--txt2);}
+
+.tl-wrap{display:flex;flex-direction:column;}
+.tl-item{display:grid;grid-template-columns:100px 1fr;gap:2rem;padding:1.75rem 0;border-top:1px solid var(--border);}
+.tl-item:first-child{border-top:none;padding-top:0;}
+.tl-yr{font-size:11px;color:var(--txt3);padding-top:2px;line-height:1.6;}
+.tl-role{font-size:15px;font-weight:500;color:var(--txt);margin-bottom:2px;}
+.tl-co{font-size:12px;color:var(--txt2);margin-bottom:9px;}
+.tl-desc{font-size:13px;font-weight:300;line-height:1.65;color:var(--txt2);}
+.tl-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px;}
+.tl-pill{font-size:10px;padding:2px 9px;border:1px solid var(--border2);border-radius:2px;color:var(--txt2);}
+.tl-pill-g{border-color:rgba(22,163,74,0.3);color:var(--green);}
+
+.stack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--border);}
+.sc{padding:1.4rem;border-right:1px solid var(--border);}
+.sc:last-child{border-right:none;}
+.sc-title{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:12px;}
+.sc-items{display:flex;flex-direction:column;gap:7px;}
+.sc-item{font-size:12px;font-weight:300;color:var(--txt2);}
+
+.contact-section{padding:3.5rem var(--px);}
+.contact-h{font-family:'Playfair Display',serif;font-size:44px;font-weight:800;letter-spacing:-0.03em;line-height:1.08;color:var(--txt);margin-bottom:0.6rem;}
+.contact-h em{font-style:italic;color:var(--accent);}
+.contact-sub{font-size:13px;color:var(--txt2);margin-bottom:2rem;font-weight:300;}
+.clinks-row{display:flex;gap:1.75rem;flex-wrap:wrap;}
+.clink{font-size:13px;color:var(--txt2);text-decoration:none;padding-bottom:2px;border-bottom:1px solid var(--border2);transition:color 0.2s;}
+.clink:hover{color:var(--txt);}
+
+footer{padding:1.4rem var(--px);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--bg2);}
+.footer-l,.footer-r{font-size:11px;color:var(--txt3);}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--bg);border-radius:14px;border:1px solid var(--border2);max-width:680px;width:100%;padding:2.25rem;position:relative;margin:auto;}
+.modal-close{position:absolute;top:1.4rem;right:1.4rem;background:none;border:none;cursor:pointer;font-size:18px;color:var(--txt3);line-height:1;transition:color 0.2s;font-family:'Inter',sans-serif;}
+.modal-close:hover{color:var(--txt);}
+.modal-kicker{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--txt3);margin-bottom:0.75rem;display:flex;gap:8px;flex-wrap:wrap;}
+.modal-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;color:var(--txt);margin-bottom:0.6rem;}
+.modal-subtitle{font-size:13px;font-weight:300;color:var(--txt2);margin-bottom:1.5rem;line-height:1.7;}
+.modal-stats{display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:1rem;}
+.modal-stat{flex:1;padding:1.1rem 0.5rem;text-align:center;border-right:1px solid var(--border);}
+.modal-stat:last-child{border-right:none;}
+.modal-stat-n{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--txt);}
+.modal-stat-l{font-size:9px;color:var(--txt3);margin-top:4px;line-height:1.3;}
+.modal-arch-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(139,111,71,0.35);padding-bottom:1px;margin-bottom:1.5rem;transition:color 0.2s;}
+.modal-arch-link:hover{color:var(--txt);}
+.modal-section{margin-bottom:1.4rem;}
+.modal-sec-title{font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:11px;}
+.modal-quote{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;line-height:1.65;color:var(--txt);padding:1.1rem 1.4rem;background:var(--bg2);border-left:2px solid var(--accent);border-radius:0 8px 8px 0;margin-bottom:1.5rem;}
+.modal-dec-list{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.modal-dec-list li{font-size:13px;font-weight:300;line-height:1.65;color:var(--txt2);display:flex;gap:9px;}
+.modal-dec-list li::before{content:'→';color:var(--accent);flex-shrink:0;font-size:11px;margin-top:3px;}
+.modal-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.modal-metric{background:var(--bg2);border-radius:7px;padding:0.85rem 1rem;}
+.modal-metric-label{font-size:10px;color:var(--txt3);font-weight:500;margin-bottom:4px;letter-spacing:0.04em;}
+.modal-metric-val{font-size:12px;font-weight:400;color:var(--txt);}
+.modal-roadmap{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.roadmap-row{display:grid;grid-template-columns:44px 1fr;border-bottom:1px solid var(--border);}
+.roadmap-row:last-child{border-bottom:none;}
+.roadmap-v{font-size:10px;font-weight:500;color:var(--accent);padding:0.7rem 0.85rem;background:var(--bg2);border-right:1px solid var(--border);display:flex;align-items:center;}
+.roadmap-desc{font-size:12px;font-weight:300;color:var(--txt2);padding:0.7rem 0.85rem;display:flex;align-items:center;}
+
+/* ── Tablet ── */
+@media(max-width:860px){
+  :root{--px:2rem;}
+  .hero h1{font-size:46px;}
+  .contact-h{font-size:36px;}
+}
+
+/* ── Mobile ── */
+@media(max-width:600px){
+  :root{--px:1.25rem;}
+  body{padding:0;}
+  .pf{border-radius:0;border-left:none;border-right:none;box-shadow:none;}
+  nav{flex-wrap:wrap;gap:0.75rem;padding:1rem var(--px);}
+  .nav-links{gap:1rem;}
+  .hero{padding:2.25rem var(--px) 2rem;}
+  .hero h1{font-size:34px;}
+  .hero-sub{font-size:14px;}
+  .stats-bar{flex-wrap:wrap;}
+  .stat{min-width:50%;border-bottom:1px solid var(--border);}
+  .stat:nth-child(2){border-right:none;}
+  .stat:nth-child(3){border-bottom:none;}
+  .stat:nth-child(4){border-bottom:none;border-right:none;}
+  .section{padding:1.75rem var(--px);}
+  .coverage-grid{grid-template-columns:1fr;}
+  .tl-item{grid-template-columns:1fr;gap:0.25rem;}
+  .tl-yr{padding-top:0;margin-bottom:4px;}
+  .stack-grid{grid-template-columns:1fr 1fr;}
+  .sc:nth-child(2){border-right:none;}
+  .sc:nth-child(3){border-top:1px solid var(--border);}
+  .sc:nth-child(4){border-top:1px solid var(--border);border-right:none;}
+  .contact-section{padding:2rem var(--px);}
+  .contact-h{font-size:30px;}
+  .clinks-row{flex-direction:column;gap:1rem;}
+  footer{padding:1rem var(--px);flex-direction:column;gap:0.4rem;text-align:center;}
+  .footer-r{display:none;}
+  .modal{padding:1.25rem;border-radius:10px;}
+  .modal-metrics{grid-template-columns:1fr;}
+  .modal-stats{flex-wrap:wrap;}
+  .modal-stat{min-width:50%;border-bottom:1px solid var(--border);}
+  .modal-stat:nth-child(2){border-right:none;}
+  .modal-stat:nth-child(3){border-bottom:none;}
+  .modal-stat:nth-child(4){border-bottom:none;border-right:none;}
+  .case-links{flex-direction:column;align-items:flex-start;gap:0.75rem;}
+  .impact-row{gap:12px;}
+}
+</style>
+</head>
+<body>
+<div class="pf">
+  <nav>
+    <a class="logo" href="#">Tanishqa Shetty.</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+    </ul>
+    <a class="nav-btn" href="https://drive.google.com/file/d/1marWi4z6PU2Z0gqSNmJCIiepumNBjYGN/view?usp=sharing" target="_blank">Resume ↗</a>
+  </nav>
+
+  <div class="avail">
+    <span class="dot"></span>
+    Open to AI PM roles
+  </div>
+
+  <section class="hero">
+    <div class="hero-kicker">AI/ML Product Manager · CSPO · Microsoft AI Engineer</div>
+    <h1>I build <em>GenAI products</em><br>that earn adoption</h1>
+    <p class="hero-sub">At Microsoft, UW, and Quantiphi, I shipped LLM agents, RAG pipelines, and eval frameworks — from 0→1 to production at scale. I care about the metrics that come after launch.</p>
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-n">5K+</div><div class="stat-l">Users at<br>Microsoft Build '25</div></div>
+      <div class="stat"><div class="stat-n">40%</div><div class="stat-l">Faster<br>time-to-publish</div></div>
+      <div class="stat"><div class="stat-n">35%</div><div class="stat-l">CSAT lift<br>via RAG agent</div></div>
+      <div class="stat"><div class="stat-n">$500K</div><div class="stat-l">Investment<br>redirected</div></div>
+    </div>
+    <div class="hero-cta">
+      <a class="btn-solid" href="#projects">View projects ↓</a>
+      <a class="btn-ghost" href="https://drive.google.com/file/d/1marWi4z6PU2Z0gqSNmJCIiepumNBjYGN/view?usp=sharing" target="_blank">Resume ↗</a>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="sec-label">About</div>
+    <div class="coverage-grid">
+      <div class="cov-item">
+        <span class="depth">Deep</span>
+        <div class="cov-title">GenAI &amp; LLM Products</div>
+        <div class="cov-sub">Fine-tuned agents, RAG systems, prompt engineering, model eval frameworks, hallucination reduction</div>
+        <div class="cov-tags">Content agent · Build '25 assistant · LLM eval pipeline</div>
+      </div>
+      <div class="cov-item">
+        <span class="depth">Deep</span>
+        <div class="cov-title">Consumer Product Strategy</div>
+        <div class="cov-sub">Roadmapping, north star metrics, OKRs, A/B experimentation, retention and engagement</div>
+        <div class="cov-tags">10K+ monthly visitors · 30% DAU growth · VP-level alignment</div>
+      </div>
+      <div class="cov-item">
+        <span class="depth">Deep</span>
+        <div class="cov-title">Data &amp; Experimentation</div>
+        <div class="cov-sub">Usage analytics, A/B design, causal inference, demand forecasting, KPI definition</div>
+        <div class="cov-tags">SDLC analytics · Looker · BigQuery · event-level data</div>
+      </div>
+      <div class="cov-item">
+        <span class="depth">Strong</span>
+        <div class="cov-title">0→1 Product Launches</div>
+        <div class="cov-sub">Scoping, MVP definition, cross-functional alignment, launch sequencing</div>
+        <div class="cov-tags">GenAI content agent · RAG student agent · Creator tools</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="projects">
+    <div class="sec-label">Projects</div>
+    <div class="cases">
+
+      <div class="case">
+        <div class="case-tags-row">
+          <span class="ctag ctag-solo">Solo PM Project · GenAI Agent</span>
+          <span class="ctag">YouTube Studio · Inspiration Tab</span>
+          <span class="ctag">React · Claude API</span>
+          <span class="ctag">10 creator interviews</span>
+        </div>
+        <div class="case-title">Creative Replay</div>
+        <div class="case-desc">I interviewed 10 YouTube creators in Mar–Apr 2026. Eight of ten said the same thing: "I can see where I lost them. I don't know what to change." Creative Replay is a GenAI agent built inside YouTube Studio's Inspiration tab — your personal coach for every video. 48 hours after you post, it reads your retention curve, diagnoses the structural drop-off, and delivers one specific creative brief for your next video. Not a report. Not a dashboard. One brief, one action, go again.</div>
+        <div class="impact-row">
+          <div class="imp"><div class="imp-n">8/10</div><div class="imp-l">Creators named this<br>their top pain point</div></div>
+          <div class="imp"><div class="imp-n">48 hrs</div><div class="imp-l">Post-publish trigger<br>window</div></div>
+          <div class="imp"><div class="imp-n">1 brief</div><div class="imp-l">Per video — specific,<br>not generic</div></div>
+        </div>
+        <div class="decisions">
+          <div class="dec-label">Key decisions</div>
+          <ul class="dec-list">
+            <li>Agent, not a feature — it runs automatically 48 hours post-publish and comes to you; no creator should have to remember to open analytics</li>
+            <li>Output is a brief, not a report — the Inspiration tab already gives you ideas; Creative Replay gives you a better-informed version of the idea you already had</li>
+            <li>One brief per video, one metric to track — four creators said multiple recommendations felt paralyzing; the constraint forces prioritization and makes the learning loop testable</li>
+          </ul>
+        </div>
+        <div class="case-links">
+          <a class="read-more-btn" href="creative-replay-architecture.html" target="_blank">View Case Study ↗</a>
+        </div>
+      </div>
+
+      <div class="case">
+        <div class="case-tags-row">
+          <span class="ctag">Microsoft</span>
+          <span class="ctag">LLM Fine-tuning</span>
+          <span class="ctag">0→1</span>
+        </div>
+        <div class="case-title">GenAI Marketing Content Agent</div>
+        <div class="case-desc">Marketers at Microsoft were losing hours to manual copy production. I led 0→1 development of an LLM agent fine-tuned on marketing documents and transcripts using Azure OpenAI, cutting time-to-publish by 40%.</div>
+        <div class="impact-row">
+          <div class="imp"><div class="imp-n">40%</div><div class="imp-l">Time-to-publish<br>reduction</div></div>
+          <div class="imp"><div class="imp-n">20%</div><div class="imp-l">Output reliability<br>improvement</div></div>
+          <div class="imp"><div class="imp-n">0→1</div><div class="imp-l">Shipped from<br>scratch</div></div>
+        </div>
+        <div class="decisions">
+          <div class="dec-label">Key decisions</div>
+          <ul class="dec-list">
+            <li>Fine-tuned on domain docs rather than general prompting — specificity drove quality where generic models fell short</li>
+            <li>Built LLM eval framework (groundedness, relevance, coherence) before shipping so hallucination reduction was measurable</li>
+            <li>Defined success as time-to-publish, not model accuracy — the metric that mattered to marketers</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="case">
+        <div class="case-tags-row">
+          <span class="ctag">Microsoft</span>
+          <span class="ctag">RAG</span>
+          <span class="ctag">Live event · 5K users</span>
+        </div>
+        <div class="case-title">Microsoft Build '25 Event Assistant</div>
+        <div class="case-desc">5,000+ attendees needed real-time answers on sessions, schedules, and helpdesk. I shipped a RAG-powered conversational assistant that replaced manual queues with intelligent self-service, lifting CSAT by 35%.</div>
+        <div class="impact-row">
+          <div class="imp"><div class="imp-n">35%</div><div class="imp-l">CSAT<br>improvement</div></div>
+          <div class="imp"><div class="imp-n">5K+</div><div class="imp-l">Live event<br>users</div></div>
+          <div class="imp"><div class="imp-n">30%</div><div class="imp-l">DAU growth<br>via A/B</div></div>
+        </div>
+        <div class="decisions">
+          <div class="dec-label">Key decisions</div>
+          <ul class="dec-list">
+            <li>Chose RAG over static FAQ — retrieval meant answers stayed current as the schedule shifted in real time</li>
+            <li>Measured CSAT not deflection — deflection rewards dodging hard questions, CSAT rewards actually helping</li>
+            <li>Ran parallel A/B experiments across web and mobile, driving 30% DAU growth during event windows</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="case">
+        <div class="case-tags-row">
+          <span class="ctag">UW</span>
+          <span class="ctag">RAG</span>
+          <span class="ctag">MVP</span>
+        </div>
+        <div class="case-title">UW Student Knowledge Agent</div>
+        <div class="case-desc">Student services were drowning in repetitive inquiries handled manually. I launched a RAG MVP integrating 5+ APIs, increasing self-service adoption by 40% and cutting manual tickets by 35%.</div>
+        <div class="impact-row">
+          <div class="imp"><div class="imp-n">40%</div><div class="imp-l">Self-service<br>adoption</div></div>
+          <div class="imp"><div class="imp-n">−35%</div><div class="imp-l">Support<br>tickets</div></div>
+          <div class="imp"><div class="imp-n">30%</div><div class="imp-l">Response time<br>reduction</div></div>
+        </div>
+        <div class="decisions">
+          <div class="dec-label">Key decisions</div>
+          <ul class="dec-list">
+            <li>Prioritized high-volume inquiry automation first — identified top patterns from ticket data before building</li>
+            <li>Multi-source API integration cut response latency 30% by pulling from authoritative sources</li>
+            <li>Iterated conversation flows using interaction data and cross-functional input, not assumptions</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section" id="experience">
+    <div class="sec-label">Experience</div>
+    <div class="tl-wrap">
+      <div class="tl-item">
+        <div class="tl-yr">2024 – Now</div>
+        <div>
+          <div class="tl-role">Product Manager</div>
+          <div class="tl-co">Microsoft · Contract</div>
+          <div class="tl-desc">Led 0→1 GenAI content agent, RAG event assistant, LLM eval framework, and A/B experimentation for 10K+ monthly visitors.</div>
+          <div class="tl-pills">
+            <span class="tl-pill">Azure OpenAI</span><span class="tl-pill">RAG</span><span class="tl-pill">LLM Fine-tuning</span><span class="tl-pill">Model Evals</span>
+            <span class="tl-pill tl-pill-g">↑40% publish speed</span><span class="tl-pill tl-pill-g">35% CSAT</span><span class="tl-pill tl-pill-g">30% DAU</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">2023 – 2024</div>
+        <div>
+          <div class="tl-role">Data Engineer</div>
+          <div class="tl-co">University of Washington</div>
+          <div class="tl-desc">Built MVP RAG knowledge agent for student services, multi-source API integration across 5+ pipelines, automated inquiry resolution.</div>
+          <div class="tl-pills">
+            <span class="tl-pill">RAG Systems</span><span class="tl-pill">Python</span><span class="tl-pill">API Integration</span>
+            <span class="tl-pill tl-pill-g">↑40% self-service</span><span class="tl-pill tl-pill-g">−35% tickets</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-yr">2021 – 2022</div>
+        <div>
+          <div class="tl-role">Product Analyst</div>
+          <div class="tl-co">Quantiphi · Google Cloud PSO</div>
+          <div class="tl-desc">PRDs for luxury conglomerate marketing tech, demand forecasting models, A/B and causal inference studies for ads programs.</div>
+          <div class="tl-pills">
+            <span class="tl-pill">PRD Writing</span><span class="tl-pill">Looker</span><span class="tl-pill">BigQuery</span><span class="tl-pill">Causal Inference</span>
+            <span class="tl-pill tl-pill-g">$500K redirected</span><span class="tl-pill tl-pill-g">↑20% ROI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-bottom:0;">
+    <div class="sec-label">The stack</div>
+    <div class="stack-grid">
+      <div class="sc"><div class="sc-title">AI / ML</div><div class="sc-items"><span class="sc-item">Azure OpenAI</span><span class="sc-item">LLM Fine-tuning</span><span class="sc-item">RAG Pipelines</span><span class="sc-item">Prompt Engineering</span><span class="sc-item">Model Evaluation</span></div></div>
+      <div class="sc"><div class="sc-title">Product</div><div class="sc-items"><span class="sc-item">Roadmapping</span><span class="sc-item">OKR Frameworks</span><span class="sc-item">A/B Experimentation</span><span class="sc-item">User Research</span><span class="sc-item">Agile / SCRUM</span></div></div>
+      <div class="sc"><div class="sc-title">Data</div><div class="sc-items"><span class="sc-item">SQL</span><span class="sc-item">Python</span><span class="sc-item">BigQuery</span><span class="sc-item">Looker</span><span class="sc-item">Power BI</span></div></div>
+      <div class="sc"><div class="sc-title">Credentials</div><div class="sc-items"><span class="sc-item">CSPO</span><span class="sc-item">MS AI Engineer</span><span class="sc-item">MS Fabric DE</span><span class="sc-item">UW MS · GPA 3.95</span><span class="sc-item">CS BE · GPA 9.23</span></div></div>
+    </div>
+  </section>
+
+  <div class="contact-section">
+    <div class="contact-h">Let's build<br>something <em>worth shipping.</em></div>
+    <div class="contact-sub">Open to AI PM roles.</div>
+    <div class="clinks-row">
+      <a class="clink" href="mailto:tanishqashetty9@gmail.com">tanishqashetty9@gmail.com</a>
+      <a class="clink" href="tel:2063879048">(206) 387-9048</a>
+      <a class="clink" href="https://www.linkedin.com/in/tanishqashetty9" target="_blank">LinkedIn ↗</a>
+      <a class="clink" href="https://drive.google.com/file/d/1marWi4z6PU2Z0gqSNmJCIiepumNBjYGN/view?usp=sharing" target="_blank">Resume ↗</a>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-l">© 2026 Tanishqa Shetty</span>
+    <span class="footer-r">CSPO · MS AI Engineer · MS Fabric DE</span>
+  </footer>
+</div>
+
+<!-- Creative Replay Modal -->
+<div class="modal-overlay" id="modal-cr" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal-cr').classList.remove('open')">✕</button>
+    <div class="modal-kicker"><span>GenAI Agent · Solo PM Project</span><span>·</span><span>YouTube Studio · Inspiration Tab</span><span>·</span><span>10 creator interviews · Mar–Apr 2026</span></div>
+    <div class="modal-title">Creative Replay</div>
+    <div class="modal-subtitle">A GenAI agent inside YouTube Studio that reads your last video's retention curve 48 hours after posting — diagnoses the structural drop-off, and delivers one specific creative brief for your next video. Not a report. One brief, one action, go again.</div>
+    <div class="modal-quote">"I can see the exact moment I lost them. I just don't know what to change next time."<br><span style="font-size:11px;font-style:normal;font-weight:300;opacity:0.6;">— Creator interview, April 2026</span></div>
+    <div class="modal-stats">
+      <div class="modal-stat"><div class="modal-stat-n">8/10</div><div class="modal-stat-l">Creators named this<br>their top pain point</div></div>
+      <div class="modal-stat"><div class="modal-stat-n">48 hrs</div><div class="modal-stat-l">Auto-trigger window<br>post-publish</div></div>
+      <div class="modal-stat"><div class="modal-stat-n">15%+</div><div class="modal-stat-l">North star: avg view<br>duration lift</div></div>
+      <div class="modal-stat"><div class="modal-stat-n">V1</div><div class="modal-stat-l">Working prototype<br>shipped</div></div>
+    </div>
+    <a class="modal-arch-link" href="creative-replay-architecture.html" target="_blank">View system architecture diagram ↗</a>
+
+    <div class="modal-section">
+      <div class="modal-sec-title">What the research revealed</div>
+      <ul class="modal-dec-list">
+        <li>Every creator I interviewed had access to retention data. None had a workflow to turn it into a creative decision</li>
+        <li>The gap isn't laziness — it's translation. The data lives as a graph; what's needed is a brief</li>
+        <li>Three creators said they close the analytics tab "feeling vague guilt" — they know something is wrong but can't act on it</li>
+        <li>Four creators said multiple AI suggestions felt paralyzing — one specific brief per video was the right constraint</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-sec-title">How the agent works</div>
+      <ul class="modal-dec-list">
+        <li>48 hours after posting, the agent reads the retention curve — automatic, no creator action required</li>
+        <li>Creator inputs three things: their niche, video concept, and retention curve in plain language — "strong open, 40% drop at 0:35, spike at 1:10, steady decline after"</li>
+        <li>Claude diagnoses the structural issue, pattern-matches against what works in that niche, and outputs a targeted brief: hook format, optimal reveal timing, where the re-engagement moment should land</li>
+        <li>The brief surfaces inside the Inspiration tab — the Inspiration tab is about new ideas, Creative Replay makes the next idea better-informed by the last one</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-sec-title">Why it's named Creative Replay</div>
+      <ul class="modal-dec-list">
+        <li>You review the tape. You figure out what to do differently. You go again</li>
+        <li>It's the post-game analysis that the Inspiration tab doesn't do — that tab is about discovering new ideas, this is about getting better at executing the idea you already had</li>
+        <li>Creator language, not product language. Every creator understands reviewing a replay</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-sec-title">Key product decisions</div>
+      <ul class="modal-dec-list">
+        <li>Agent, not a feature — it triggers automatically; no creator should have to remember to open analytics 48 hours after posting</li>
+        <li>Retention curve as plain language input — the prototype doesn't need real API data; a creator describing their curve in one sentence is enough signal for diagnosis</li>
+        <li>Output is a brief, not a report — hook format, reveal timing, re-engagement placement. Specific, not general</li>
+        <li>One brief per video, one metric to track — the constraint forces prioritization and makes the learning loop testable across videos</li>
+        <li>Guardrail: creative confidence score — the brief must feel like theirs, not the tool's. If creators feel prescribed to, it fails regardless of retention outcomes</li>
+      </ul>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-sec-title">What the brief contains</div>
+      <div class="modal-metrics">
+        <div class="modal-metric"><div class="modal-metric-label">Drop-off diagnosis</div><div class="modal-metric-val">Structural reason for the drop, specific to niche</div></div>
+        <div class="modal-metric"><div class="modal-metric-label">Hook format</div><div class="modal-metric-val">Specific opening approach to try next</div></div>
+        <div class="modal-metric"><div class="modal-metric-label">Reveal timing</div><div class="modal-metric-val">Optimal moment to land the payoff</div></div>
+        <div class="modal-metric"><div class="modal-metric-label">Re-engagement move</div><div class="modal-metric-val">Where and how to pull viewers back</div></div>
+        <div class="modal-metric"><div class="modal-metric-label">Next video concept</div><div class="modal-metric-val">One idea applying all of the above</div></div>
+        <div class="modal-metric"><div class="modal-metric-label">One metric to watch</div><div class="modal-metric-val">Avg view duration — did the fix work?</div></div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-sec-title">Roadmap</div>
+      <div class="modal-roadmap">
+        <div class="roadmap-row"><div class="roadmap-v">V1</div><div class="roadmap-desc">Simulated retention input, Claude-powered brief — shipped ✓</div></div>
+        <div class="roadmap-row"><div class="roadmap-v">V2</div><div class="roadmap-desc">YouTube Analytics API integration — agent reads real retention curve, no manual input</div></div>
+        <div class="roadmap-row"><div class="roadmap-v">V3</div><div class="roadmap-desc">Channel history pattern matching — diagnosis improves across your last 20 videos</div></div>
+        <div class="roadmap-row"><div class="roadmap-v">V4</div><div class="roadmap-desc">Rewatch spike detection — surfaces what worked, not just what didn't</div></div>
+        <div class="roadmap-row"><div class="roadmap-v">V5</div><div class="roadmap-desc">Niche benchmarking — how your retention compares to similar creators on the platform</div></div>
+      </div>
+    </div>
+
+    <div class="modal-section" style="margin-bottom:0;">
+      <div class="modal-sec-title">What I'd do next</div>
+      <ul class="modal-dec-list">
+        <li>Put the prototype in front of real creators and watch whether they trust the diagnosis — that trust question is the product's most important open variable</li>
+        <li>The most interesting future version runs before filming — describe your concept, get predicted drop-off points based on channel history, before you pick up the camera</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</body>
 </html>

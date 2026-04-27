@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creative Replay — Architecture · Tanishqa Shetty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#faf9f7;--bg2:#f3f1ed;--bg3:#eceae4;
+  --txt:#1a1917;--txt2:#6b6860;--txt3:#a09d98;
+  --accent:#8b6f47;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
+}
+body{background:#f0ede8;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;font-family:'Inter',sans-serif;}
+.card{background:var(--bg);max-width:800px;width:100%;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 4px 40px rgba(0,0,0,0.08);}
+header{padding:2rem 2.5rem 1.5rem;border-bottom:1px solid var(--border);}
+.back{font-size:11px;color:var(--txt3);text-decoration:none;letter-spacing:0.06em;display:inline-flex;align-items:center;gap:5px;margin-bottom:1.25rem;}
+.back:hover{color:var(--txt2);}
+.eyebrow{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--txt3);margin-bottom:0.6rem;}
+h1{font-family:'Playfair Display',serif;font-size:32px;font-weight:800;letter-spacing:-0.02em;line-height:1.1;color:var(--txt);margin-bottom:0.5rem;}
+.subtitle{font-size:14px;font-weight:300;line-height:1.7;color:var(--txt2);max-width:560px;}
+.meta{display:flex;gap:1rem;margin-top:1.25rem;flex-wrap:wrap;}
+.meta-tag{font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;padding:3px 10px;border:1px solid var(--border2);border-radius:2px;color:var(--txt2);}
+.diagram-wrap{padding:2rem 2.5rem;border-bottom:1px solid var(--border);background:var(--bg);}
+.legend{display:flex;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--txt2);}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+.leg-user{background:#E1F5EE;border:1px solid #1D9E75;}
+.leg-product{background:#EEEDFE;border:1px solid #7F77DD;}
+.leg-ai{background:#FAEEDA;border:1px solid #BA7517;}
+.leg-data{background:#F1EFE8;border:1px solid #888780;}
+
+.section-block{padding:1.75rem 2.5rem;border-bottom:1px solid var(--border);}
+.section-block:last-child{border-bottom:none;}
+.sec-title{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--txt3);margin-bottom:1rem;display:flex;align-items:center;gap:10px;}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.flow-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.flow-step{padding:1rem;background:var(--bg);border-right:1px solid var(--border);text-align:center;}
+.flow-step:last-child{border-right:none;}
+.step-num{font-size:10px;font-weight:500;color:var(--txt3);margin-bottom:6px;letter-spacing:0.06em;}
+.step-label{font-size:12px;font-weight:500;color:var(--txt);line-height:1.3;margin-bottom:4px;}
+.step-sub{font-size:11px;font-weight:300;color:var(--txt2);line-height:1.4;}
+.step-arr{display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--txt3);padding:0 0.25rem;}
+
+.decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.dec-card{background:var(--bg2);border-radius:8px;padding:1rem 1.1rem;}
+.dec-q{font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;}
+.dec-a{font-size:12px;font-weight:400;color:var(--txt);line-height:1.5;margin-bottom:4px;}
+.dec-why{font-size:11px;font-weight:300;color:var(--txt2);line-height:1.4;}
+
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.metric-card{background:var(--bg2);border-radius:6px;padding:0.85rem 1rem;text-align:center;}
+.metric-type{font-size:9px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;}
+.metric-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--txt);line-height:1;}
+.metric-label{font-size:10px;font-weight:300;color:var(--txt2);margin-top:4px;line-height:1.3;}
+
+footer-bar{display:block;padding:1.25rem 2.5rem;background:var(--bg2);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.footer-l{font-size:11px;color:var(--txt3);}
+.footer-r{font-size:11px;color:var(--txt3);}
+.footer-link{color:var(--accent);text-decoration:none;font-size:11px;}
+.footer-link:hover{color:var(--txt);}
+
+svg text{font-family:'Inter',sans-serif;}
+</style>
+</head>
+<body>
+<div class="card">
+  <header>
+    <a class="back" href="index.html">← Back to portfolio</a>
+    <div class="eyebrow">GenAI Agent · Solo PM Project · YouTube Studio · Inspiration Tab · React + Claude API</div>
+    <h1>Creative Replay</h1>
+    <p class="subtitle">A GenAI agent inside YouTube Studio that reads your last video's retention curve 48 hours after posting, diagnoses the structural drop-off, and delivers one specific creative brief for your next video. Not a report. One brief, one action, go again. Lives inside the Inspiration tab — the Inspiration tab is for discovering new ideas; Creative Replay makes the next idea better-informed by the last one.</p>
+    <div class="meta">
+      <span class="meta-tag">Discovery: 10 creator interviews</span>
+      <span class="meta-tag">Mar – Apr 2026</span>
+      <span class="meta-tag">V1 prototype shipped</span>
+      <span class="meta-tag">Claude API · React · Vite</span>
+    </div>
+  </header>
+
+  <!-- User research section -->
+  <div class="section-block">
+    <div class="sec-title">Research foundation</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+      <div style="grid-column:span 3;font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--txt3);margin-bottom:0.75rem;">Research foundation · 10 creator interviews · Mar–Apr 2026</div>
+      <div style="background:var(--bg2);border-radius:8px;padding:1rem 1.1rem;">
+        <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;">The finding</div>
+        <div style="font-size:13px;font-weight:500;color:var(--txt);margin-bottom:3px;">8 of 10 creators said the same thing</div>
+        <div style="font-size:12px;font-weight:300;color:var(--txt2);">"I can see where I lost them. I don't know what to change." Every creator had the data. None had a workflow to act on it.</div>
+      </div>
+      <div style="background:var(--bg2);border-radius:8px;padding:1rem 1.1rem;">
+        <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;">How the agent works</div>
+        <div style="font-size:13px;font-weight:500;color:var(--txt);margin-bottom:3px;">48 hrs post-publish → retention curve → one brief</div>
+        <div style="font-size:12px;font-weight:300;color:var(--txt2);">Creator inputs niche, concept, and retention curve in plain language. Claude diagnoses the structural issue and outputs hook format, reveal timing, and re-engagement placement.</div>
+      </div>
+      <div style="background:var(--bg2);border-radius:8px;padding:1rem 1.1rem;">
+        <div style="font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;">Why the name</div>
+        <div style="font-size:13px;font-weight:500;color:var(--txt);margin-bottom:3px;">Review the tape. Change one thing. Go again.</div>
+        <div style="font-size:12px;font-weight:300;color:var(--txt2);">Inspiration tab = discover new ideas. Creative Replay = get better at executing the idea you already had. Creator language, not product language.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key decisions -->
+  <div class="section-block">
+    <div class="sec-title">Key product decisions</div>
+    <div class="decision-grid">
+      <div class="dec-card">
+        <div class="dec-q">Input design</div>
+        <div class="dec-a">Retention signal, not the video</div>
+        <div class="dec-why">Creators told me they didn't want to re-upload footage. The shape of the drop-off is the insight — not the content. In V2, this pulls directly from the Analytics API.</div>
+      </div>
+      <div class="dec-card">
+        <div class="dec-q">Output format</div>
+        <div class="dec-a">Brief, not report</div>
+        <div class="dec-why">Analytics already reports. Three creators said they close the analytics tab feeling vague guilt. Creative Replay closes the session with a next action.</div>
+      </div>
+      <div class="dec-card">
+        <div class="dec-q">Measurement</div>
+        <div class="dec-a">One metric per brief</div>
+        <div class="dec-why">Multiple metrics split attention and make it impossible to attribute a change. Average view duration on the next video is the single north star — did the structural fix work?</div>
+      </div>
+      <div class="dec-card">
+        <div class="dec-q">Why this belongs in the Inspiration tab</div>
+        <div class="dec-a">Enhancement, not a new surface</div>
+        <div class="dec-why">The Inspiration tab already lives where creators go to decide what to make next. Creative Replay adds a "from your last video" layer — making that decision data-informed rather than purely intuition-driven. No new habit required.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success metrics -->
+  <div class="section-block">
+    <div class="sec-title">How I'd measure success</div>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="metric-type">North star</div>
+        <div class="metric-val">15%+</div>
+        <div class="metric-label">Avg view duration lift on next video</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-type">Leading</div>
+        <div class="metric-val">50%+</div>
+        <div class="metric-label">Brief adoption rate — did they apply it?</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-type">Leading</div>
+        <div class="metric-val">40%+</div>
+        <div class="metric-label">Return usage within 14 days</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-type">Guardrail</div>
+        <div class="metric-val">4.0+</div>
+        <div class="metric-label">Creative confidence score (out of 5)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="diagram-wrap">
+    <div class="legend">
+      <div class="legend-item"><div class="leg-dot leg-user"></div>Creator layer</div>
+      <div class="legend-item"><div class="leg-dot leg-product"></div>Product layer</div>
+      <div class="legend-item"><div class="leg-dot leg-ai"></div>AI layer</div>
+      <div class="legend-item"><div class="leg-dot leg-data"></div>Data layer</div>
+    </div>
+    <svg width="100%" viewBox="0 0 740 560" role="img" xmlns="http://www.w3.org/2000/svg">
+      <title>Creative Replay system architecture diagram</title>
+      <desc>A layered architecture showing creator input flowing through the Creative Replay product, AI processing via Claude API, and a structured brief output with a feedback loop.</desc>
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <text x="12" y="124" font-size="10" font-weight="500" fill="#a09d98" font-family="Inter,sans-serif" transform="rotate(-90,12,124)" text-anchor="middle" letter-spacing="1">CREATOR</text>
+      <text x="12" y="264" font-size="10" font-weight="500" fill="#a09d98" font-family="Inter,sans-serif" transform="rotate(-90,12,264)" text-anchor="middle" letter-spacing="1">PRODUCT</text>
+      <text x="12" y="394" font-size="10" font-weight="500" fill="#a09d98" font-family="Inter,sans-serif" transform="rotate(-90,12,394)" text-anchor="middle" letter-spacing="1">AI</text>
+      <text x="12" y="510" font-size="10" font-weight="500" fill="#a09d98" font-family="Inter,sans-serif" transform="rotate(-90,12,510)" text-anchor="middle" letter-spacing="1">OUTPUT</text>
+      <rect x="32" y="56"  width="700" height="96"  rx="8" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5" opacity="0.5"/>
+      <rect x="32" y="164" width="700" height="120" rx="8" fill="#EEEDFE" stroke="#7F77DD" stroke-width="0.5" opacity="0.5"/>
+      <rect x="32" y="296" width="700" height="120" rx="8" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5" opacity="0.5"/>
+      <rect x="32" y="428" width="700" height="106" rx="8" fill="#F1EFE8" stroke="#888780" stroke-width="0.5" opacity="0.5"/>
+      <rect x="56" y="76" width="148" height="56" rx="6" fill="white" stroke="#1D9E75" stroke-width="1"/>
+      <text x="130" y="101" font-size="12" font-weight="500" fill="#085041" font-family="Inter,sans-serif" text-anchor="middle">Retention graph</text>
+      <text x="130" y="116" font-size="11" font-weight="300" fill="#0F6E56" font-family="Inter,sans-serif" text-anchor="middle">Drop-off at 0:38 · 45%</text>
+      <rect x="228" y="76" width="148" height="56" rx="6" fill="white" stroke="#1D9E75" stroke-width="1"/>
+      <text x="302" y="101" font-size="12" font-weight="500" fill="#085041" font-family="Inter,sans-serif" text-anchor="middle">Niche + format</text>
+      <text x="302" y="116" font-size="11" font-weight="300" fill="#0F6E56" font-family="Inter,sans-serif" text-anchor="middle">Tech review · long-form</text>
+      <rect x="400" y="76" width="148" height="56" rx="6" fill="white" stroke="#1D9E75" stroke-width="1"/>
+      <text x="474" y="101" font-size="12" font-weight="500" fill="#085041" font-family="Inter,sans-serif" text-anchor="middle">Hook rating</text>
+      <text x="474" y="116" font-size="11" font-weight="300" fill="#0F6E56" font-family="Inter,sans-serif" text-anchor="middle">Self-rated 3/5</text>
+      <rect x="572" y="76" width="144" height="56" rx="6" fill="white" stroke="#1D9E75" stroke-width="1"/>
+      <text x="644" y="101" font-size="12" font-weight="500" fill="#085041" font-family="Inter,sans-serif" text-anchor="middle">Observations</text>
+      <text x="644" y="116" font-size="11" font-weight="300" fill="#0F6E56" font-family="Inter,sans-serif" text-anchor="middle">Creator's own notes</text>
+      <line x1="130" y1="132" x2="130" y2="162" stroke="#1D9E75" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+      <line x1="302" y1="132" x2="302" y2="162" stroke="#1D9E75" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+      <line x1="474" y1="132" x2="474" y2="162" stroke="#1D9E75" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+      <line x1="644" y1="132" x2="644" y2="162" stroke="#1D9E75" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+      <rect x="56" y="180" width="168" height="56" rx="6" fill="white" stroke="#7F77DD" stroke-width="1"/>
+      <text x="140" y="204" font-size="12" font-weight="500" fill="#3C3489" font-family="Inter,sans-serif" text-anchor="middle">Signal parser</text>
+      <text x="140" y="220" font-size="11" font-weight="300" fill="#534AB7" font-family="Inter,sans-serif" text-anchor="middle">Validates + structures input</text>
+      <rect x="250" y="180" width="168" height="56" rx="6" fill="white" stroke="#7F77DD" stroke-width="1"/>
+      <text x="334" y="204" font-size="12" font-weight="500" fill="#3C3489" font-family="Inter,sans-serif" text-anchor="middle">Context builder</text>
+      <text x="334" y="220" font-size="11" font-weight="300" fill="#534AB7" font-family="Inter,sans-serif" text-anchor="middle">Formats prompt for Claude</text>
+      <rect x="444" y="180" width="168" height="56" rx="6" fill="white" stroke="#7F77DD" stroke-width="1"/>
+      <text x="528" y="204" font-size="12" font-weight="500" fill="#3C3489" font-family="Inter,sans-serif" text-anchor="middle">Brief renderer</text>
+      <text x="528" y="220" font-size="11" font-weight="300" fill="#534AB7" font-family="Inter,sans-serif" text-anchor="middle">Parses + displays 7 outputs</text>
+      <line x1="224" y1="208" x2="248" y2="208" stroke="#7F77DD" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="418" y1="208" x2="442" y2="208" stroke="#7F77DD" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="334" y1="236" x2="334" y2="294" stroke="#7F77DD" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+      <rect x="56" y="312" width="168" height="56" rx="6" fill="white" stroke="#BA7517" stroke-width="1"/>
+      <text x="140" y="336" font-size="12" font-weight="500" fill="#633806" font-family="Inter,sans-serif" text-anchor="middle">Prompt template</text>
+      <text x="140" y="352" font-size="11" font-weight="300" fill="#854F0B" font-family="Inter,sans-serif" text-anchor="middle">Niche-aware system prompt</text>
+      <rect x="256" y="305" width="224" height="70" rx="8" fill="white" stroke="#BA7517" stroke-width="1.5"/>
+      <text x="368" y="333" font-size="13" font-weight="500" fill="#412402" font-family="Inter,sans-serif" text-anchor="middle">Claude API</text>
+      <text x="368" y="350" font-size="11" font-weight="300" fill="#854F0B" font-family="Inter,sans-serif" text-anchor="middle">claude-sonnet · max_tokens 1000</text>
+      <text x="368" y="366" font-size="11" font-weight="300" fill="#854F0B" font-family="Inter,sans-serif" text-anchor="middle">Diagnose → pattern match → brief</text>
+      <rect x="512" y="312" width="204" height="56" rx="6" fill="white" stroke="#BA7517" stroke-width="1"/>
+      <text x="614" y="336" font-size="12" font-weight="500" fill="#633806" font-family="Inter,sans-serif" text-anchor="middle">Response parser</text>
+      <text x="614" y="352" font-size="11" font-weight="300" fill="#854F0B" font-family="Inter,sans-serif" text-anchor="middle">Structured JSON → UI fields</text>
+      <line x1="224" y1="340" x2="254" y2="340" stroke="#BA7517" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="480" y1="340" x2="510" y2="340" stroke="#BA7517" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="614" y1="368" x2="614" y2="426" stroke="#BA7517" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+      <line x1="368" y1="375" x2="368" y2="426" stroke="#BA7517" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#arr)"/>
+      <rect x="56"  y="444" width="110" height="74" rx="6" fill="white" stroke="#888780" stroke-width="1"/>
+      <text x="111" y="467" font-size="11" font-weight="500" fill="#2C2C2A" font-family="Inter,sans-serif" text-anchor="middle">Hook direction</text>
+      <text x="111" y="482" font-size="10" font-weight="300" fill="#5F5E5A" font-family="Inter,sans-serif" text-anchor="middle">Specific angle</text>
+      <text x="111" y="495" font-size="10" font-weight="300" fill="#5F5E5A" font-family="Inter,sans-serif" text-anchor="middle">to try next</text>
+      <rect x="182" y="444" width="110" height="74" rx="6" fill="white" stroke="#888780" stroke-width="1"/>
+      <text x="237" y="467" font-size="11" font-weight="500" fill="#2C2C2A" font-family="Inter,sans-serif" text-anchor="middle">Structure fix</text>
+      <text x="237" y="482" font-size="10" font-weight="300" fill="#5F5E5A" font-family="Inter,sans-serif" text-anchor="middle">One change to</text>
+      <text x="237" y="495" font-size="10" font-weight="300" fill="#5F5E5A" font-family="Inter,sans-serif" text-anchor="middle">video arc</text>
+      <rect x="308" y="444" width="110" height="74" rx="6" fill="white" stroke="#888780" stroke-width="1"/>
+      <text x="363" y="467" font-size="11" font-weight="500" fill="#2C2C2A" font-family="Inter,sans-serif" text-anchor="middle">Retention move</text>
+      <text x="363" y="482" font-size="10" font-weight="300" fill="#5F5E5A" font-family="Inter,sans-serif" text-anchor="middle">Re-engage at</text>
+      <text x="363" y="495" font-size="10" font-weight="300" fill="#5F5E5A" font-family="Inter,sans-serif" text-anchor="middle">drop-off point</text>
+      <rect x="434" y="444" width="110" height="74" rx="6" fill="white" stroke="#888780" stroke-width="1"/>
+      <text x="489" y="467" font-size="11" font-weight="500" fill="#2C2C2A" font-family="Inter,sans-serif" text-anchor="middle">Next concept</text>
+      <text x="489" y="482" font-size="10" font-weight="300" fill="#5F5E5A" font-family="Inter,sans-serif" text-anchor="middle">Full video idea</text>
+      <text x="489" y="495" font-size="10" font-weight="300" fill="#5F5E5A" font-family="Inter,sans-serif" text-anchor="middle">with opening line</text>
+      <rect x="560" y="444" width="162" height="74" rx="6" fill="#EEEDFE" stroke="#7F77DD" stroke-width="1"/>
+      <text x="641" y="465" font-size="11" font-weight="500" fill="#3C3489" font-family="Inter,sans-serif" text-anchor="middle">One metric to watch</text>
+      <text x="641" y="480" font-size="10" font-weight="300" fill="#534AB7" font-family="Inter,sans-serif" text-anchor="middle">Avg view duration</text>
+      <text x="641" y="494" font-size="10" font-weight="300" fill="#534AB7" font-family="Inter,sans-serif" text-anchor="middle">on the next video</text>
+      <text x="641" y="509" font-size="10" font-weight="500" fill="#534AB7" font-family="Inter,sans-serif" text-anchor="middle">→ north star signal</text>
+      <path d="M 720 500 Q 740 500 740 280 Q 740 68 700 68" fill="none" stroke="#8b6f47" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+      <text x="728" y="295" font-size="10" fill="#8b6f47" font-family="Inter,sans-serif" text-anchor="middle" transform="rotate(90,728,295)">Learning loop</text>
+    </svg>
+  </div>
+
+  <!-- Roadmap -->
+  <div class="section-block">
+    <div class="sec-title">Roadmap</div>
+    <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+      <div style="display:grid;grid-template-columns:48px 1fr 1fr;border-bottom:1px solid var(--border);">
+        <div style="padding:0.65rem 0.85rem;background:var(--bg2);border-right:1px solid var(--border);font-size:10px;font-weight:500;color:var(--accent);">V1</div>
+        <div style="padding:0.65rem 0.85rem;font-size:12px;font-weight:400;color:var(--txt);border-right:1px solid var(--border);">Manual retention input, Claude-powered brief</div>
+        <div style="padding:0.65rem 0.85rem;font-size:11px;font-weight:300;color:var(--txt2);">Shipped ✓ · gate: prototype validation</div>
+      </div>
+      <div style="display:grid;grid-template-columns:48px 1fr 1fr;border-bottom:1px solid var(--border);">
+        <div style="padding:0.65rem 0.85rem;background:var(--bg2);border-right:1px solid var(--border);font-size:10px;font-weight:500;color:var(--txt3);">V2</div>
+        <div style="padding:0.65rem 0.85rem;font-size:12px;font-weight:400;color:var(--txt);border-right:1px solid var(--border);">Direct Analytics API integration, auto-pulls retention curve</div>
+        <div style="padding:0.65rem 0.85rem;font-size:11px;font-weight:300;color:var(--txt2);">Gate: brief adoption rate &gt;50%</div>
+      </div>
+      <div style="display:grid;grid-template-columns:48px 1fr 1fr;border-bottom:1px solid var(--border);">
+        <div style="padding:0.65rem 0.85rem;background:var(--bg2);border-right:1px solid var(--border);font-size:10px;font-weight:500;color:var(--txt3);">V3</div>
+        <div style="padding:0.65rem 0.85rem;font-size:12px;font-weight:400;color:var(--txt);border-right:1px solid var(--border);">Channel history pattern matching across last 20 videos</div>
+        <div style="padding:0.65rem 0.85rem;font-size:11px;font-weight:300;color:var(--txt2);">Gate: return usage &gt;40%</div>
+      </div>
+      <div style="display:grid;grid-template-columns:48px 1fr 1fr;border-bottom:1px solid var(--border);">
+        <div style="padding:0.65rem 0.85rem;background:var(--bg2);border-right:1px solid var(--border);font-size:10px;font-weight:500;color:var(--txt3);">V4</div>
+        <div style="padding:0.65rem 0.85rem;font-size:12px;font-weight:400;color:var(--txt);border-right:1px solid var(--border);">Rewatch spike detection — surfaces positive signals, not just drops</div>
+        <div style="padding:0.65rem 0.85rem;font-size:11px;font-weight:300;color:var(--txt2);">Gate: V3 retention lift confirmed</div>
+      </div>
+      <div style="display:grid;grid-template-columns:48px 1fr 1fr;">
+        <div style="padding:0.65rem 0.85rem;background:var(--bg2);border-right:1px solid var(--border);font-size:10px;font-weight:500;color:var(--txt3);">V5</div>
+        <div style="padding:0.65rem 0.85rem;font-size:12px;font-weight:400;color:var(--txt);border-right:1px solid var(--border);">Niche benchmarking: how your retention compares to similar creators</div>
+        <div style="padding:0.65rem 0.85rem;font-size:11px;font-weight:300;color:var(--txt2);">Gate: platform data access approved</div>
+      </div>
+    </div>
+  </div>
+
+  <footer-bar>
+    <span class="footer-l">© 2026 Tanishqa Shetty · Independent portfolio concept · Not affiliated with YouTube or Google</span>
+    <a class="footer-link" href="index.html">← Back to portfolio</a>
+  </footer-bar>
+</div>
+</body>
+</html>
